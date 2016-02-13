@@ -1,0 +1,121 @@
+<!--?xml version="1.0"?-->
+
+<!--
+/**
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade OrviSoft Latest to newer
+ * versions in the future. If you wish to customize the code for your
+ * needs please refer to https://orvisoft.com/ for more information.
+ *
+ * @category    OrviSoft Latest Magento Connect
+ * @package     Orvisoft_Latest
+ * @copyright   Copyright (c) 20015 OrviSoft Private Limited. (www.orvisoft.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+/**
+ * OrviSoft Latest Package Module.
+ *
+ * @category   OrviSoft Latest Magento Connect
+ * @package    Orvisoft_Latest
+ * @author     Farhan Islam <farhan@orvisoft.com>
+ */ -->
+<config>
+    <modules>
+        <Orvisoft_Latest>
+            <version>0.1.0</version>
+        </Orvisoft_Latest>
+    </modules>
+	<global>
+        <models>
+            <orvisoftlatest>
+                <class>Orvisoft_Latest_Model</class>
+            </orvisoftlatest>
+        </models>
+        <helpers>
+            <orvisoftlatest>
+                <class>Orvisoft_Latest_Helper</class>
+            </orvisoftlatest>
+        </helpers>
+        <blocks>
+            <orvisoftlatest>
+                <class>Orvisoft_Latest_Block</class>
+            </orvisoftlatest>
+        </blocks>
+    </global>
+    <frontend>
+        <routers>
+            <orvisoftlatest>
+                <use>standard</use>
+                <args>
+                    <module>Orvisoft_Latest</module>
+                    <frontName>latest</frontName> 
+                </args>
+            </orvisoftlatest>
+        </routers>
+        <layout>
+            <updates>
+                <orvisoftlatest>
+                    <file>orvisoftlatest.xml</file>
+                </orvisoftlatest>
+            </updates>
+        </layout>
+    </frontend>
+	<adminhtml>     
+        <translate>
+            <modules>
+                <Orvisoft_Latest>
+                    <files>
+                        <default>Orvisoft_Latest.csv</default>
+                    </files>
+                </Orvisoft_Latest>
+            </modules>
+        </translate>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <orvisoftlatest translate="title" module="orvisoftlatest">
+                                            <title>OrviSoft Latest</title>
+                                        </orvisoftlatest>
+                                        <orvisoftlatest_setup translate="title" module="orvisoftlatest">
+                                            <title>Setup</title>
+                                        </orvisoftlatest_setup>
+                                        <orvisoftlatest_info translate="title" module="orvisoftlatest">
+                                            <title>Info</title>
+                                        </orvisoftlatest_info>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+        <layout>
+            <updates>
+                <orvisoftlatest>
+                    <file>orvisoftlatest.xml</file>
+                </orvisoftlatest>
+            </updates>
+        </layout>
+    </adminhtml>
+	<default>
+		<orvisoftlatest_setup>
+			<settings>
+				<page_size>8</page_size>
+				<product_size>4</product_size>
+				<total>1</total>
+				<total_new>1</total_new>
+				<last_update>1</last_update>
+				<include_empty>0</include_empty>
+				<empty_message>We are sorry, currently there isn't any new product available.</empty_message>
+			</settings>
+		</orvisoftlatest_setup>
+	</default>
+</config>

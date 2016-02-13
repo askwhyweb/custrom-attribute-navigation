@@ -1,0 +1,145 @@
+<?php
+if(!function_exists('shuffle_assoc')){
+	function shuffle_assoc($list) { 
+	  if (!is_array($list)) return $list; 
+
+	  $keys = array_keys($list); 
+	  shuffle($keys); 
+	  $random = array(); 
+	  foreach ($keys as $key) { 
+		$random[$key] = $list[$key]; 
+	  }
+	  return $random; 
+	} 
+}
+/**
+ *	$this Orvisoft_Latest_Block_Categories
+ *	
+ **/
+//$products = $this->getCurrentEntityKey();
+$products = Mage::registry('category_products_latest');
+$displayed_products = array();
+$number_of_products = $products->count();
+$_this = $this->getLayout()->getBlockSingleton('catalog/product_list');
+//echo '<pre>'.print_r($products->count(), true).'</pre>';
+$_helper    = $this->helper('catalog/output');
+$currentPageSize = Mage::registry('page_size');
+$help = $this->helper('orvisoftlatest/data');
+
+foreach ($products as $_product) {
+	$displayed_products[] = array(
+	'id' => $_product->getId(),
+	'url' => $_product->getProductUrl(),
+	'title' => $_product->getName(),
+	'image' => '',
+	'name' => $_product->getName(),
+	'finalprice' => $_product->getFinalPrice(),
+	'price', $_product->getPrice(),
+	'pricehtml' => $_this->getPriceHtml($_product, true),
+	'rating' => ($_product->getRatingSummary() ? $_this->getReviewsSummaryHtml($_product, 'short'):''));
+}
+$random_products = array();
+if (sizeof($products) > 1 && $this->getOrderBySelection('random', '')) {
+	$random_products = shuffle_assoc($displayed_products);
+} else {
+	$random_products = $displayed_products;
+	echo 'Non random sorting';
+}
+$_productCollection = $random_products;
+// Lets do something interesting....!
+
+// Mage_Catalog_Block_Product_List
+$_category = $this->getDesignCategory();
+$_imgHtml   = '';
+if ($_category && $_imgUrl = $_category->getImageUrl()) {
+	$_imgHtml = '<p class="category-image"><img src="'.$_imgUrl.'" alt="'.$_category->getName().'" title="'.$_category->getName().'" /></p>';
+}
+if(!function_exists('_t_percent')){
+	function _t_percent($num_amount, $num_total) {
+		$diff = ($num_total - $num_amount) / $num_total; 
+		$count2 = $diff * 100;
+		$count = number_format($count2, 0);
+		return $count;
+	}
+}
+echo count($products);
+?>
+	<?php if($_category): ?>
+	<div itemprop="brand" itemscope itemtype="http://schema.org/Brand" class="page-title category-title">
+		<h1 itemprop="name"><?php echo $_category->getName(); ?></h1>
+	</div>
+	<?php endif; ?>
+	<?php if($_category && $_description=$_category->getDescription()): ?>
+    <div class="category-description std custom_moreline">
+        <?php echo $_description; ?>
+    </div>
+    <?php endif; ?>
+<?php if($_imgUrl): ?>
+    <?php echo $_imgHtml ?>
+<?php endif; ?>
+	
+	<div class="category-products">
+	
+	<?php if($_collectionSize = $products->count()): ?>
+		<div class="pagination_new toolbar">
+			<div class="btn-group">
+				<?php echo $this->getPaginationHtml(); ?>
+			</div>
+			<div class="custom_page_show">
+				<div style="float: left; font-size: 13px;margin-top:20px; " class="sort_list">
+					<strong><?php echo $this->__('Sort By');?></strong>
+					<select class="optional overall classes" id="new_sort_by_dropdown" style="padding: 0px; margin-right: 15px;margin-top:-8px; height: 36px; font-size: 13px;" onchange="window.location=this.value;">
+						<option value="<?php echo $this->getOrderByUrl('random', 'desc'); ?>"<?php if($this->getOrderBySelection('random', '')): ?> selected="selected"<?php endif; ?>><?php echo $this->__('Random'); ?></option>
+            <option value="<?php echo $this->getOrderByUrl('created_at', 'desc'); ?>"<?php if($this->getOrderBySelection('created_at', 'desc', true)): ?> selected="selected"<?php endif; ?>><?php echo $this->__('New Arrivals'); ?></option>
+						<option value="<?php echo $this->getOrderByUrl('base_size', 'asc'); ?>"<?php if($this->getOrderBySelection('base_size', 'asc')): ?> selected="selected"<?php endif; ?>><?php echo $this->__('Size - small first'); ?></option>
+						<option value="<?php echo $this->getOrderByUrl('base_size', 'desc'); ?>"<?php if($this->getOrderBySelection('base_size', 'desc')): ?> selected="selected"<?php endif; ?>><?php echo $this->__('Size - large first'); ?></option>
+						<option value="<?php echo $this->getOrderByUrl('price', 'asc'); ?>"<?php if($this->getOrderBySelection('price', 'asc')): ?> selected="selected"<?php endif; ?>><?php echo $this->__('Price - low first'); ?></option>
+						<option value="<?php echo $this->getOrderByUrl('price', 'desc'); ?>"<?php if($this->getOrderBySelection('price', 'desc')): ?> selected="selected"<?php endif; ?>><?php echo $this->__('Price - high first'); ?></option>
+					</select>
+				</div>
+			
+				<div style="float: right" class="btn-group" id="pagelimit">
+					<?php foreach($help->getPagesLimit() as $limit): ?>
+					<a class="btn<?php echo $currentPageSize == $limit ? ' active':''; ?>" href="<?php echo $this->getPreparedUrlClone('limit', true); ?>limit=<?php echo $limit; ?>"><?php echo $limit; ?></a>
+					<?php endforeach; ?>
+				</div>
+			</div>
+		</div>
+    <?php $_columnCount = 3; ?>
+<?php //echo '<pre>'.print_r($_productCollection, true).'</pre>'; ?>
+		<?php $i=0; foreach ($_productCollection as $_product): ?>
+
+        <?php if ($i++%$_columnCount==0): ?>
+        <ul class="products-grid">
+        <?php endif ?>
+            <li itemscope itemtype="http://schema.org/Product" class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
+                <a itemprop="url" href="<?php echo $_product['url'] ?>" title="<?php echo $_product['title'] ?>" class="product-image"><img itemprop="image"  src="<?php echo Mage::helper('catalog/image')->init(Mage::getModel('catalog/product')->load($_product['id']), 'image')->resize(225); ?>" width="225" height="225" alt="<?php echo $_product['title']; ?>" /></a>
+                <h2 class="product-name"><a itemprop="name" href="<?php echo $_product['url'] ?>" title="<?php echo $_product['title'] ?>"><?php echo $_product['name'] ?></a></h2>
+                <?php //if($_product->getRatingSummary()): ?>
+                <?php echo $_product['rating']; ?>
+                <?php //endif; ?>
+				<?php if(@$_product['finalprice'] !== @$_product['price']): ?>
+				<div class="percent_off"><?php echo $_this->__('%s&#37; OFF', _t_percent(@$_product['finalprice'], @$_product['price'])); ?></div>
+				<?php endif; ?>
+                <span itemprop="offers" itemscope itemtype="http://schema.org/Offer"> <span itemprop="price"><?php echo $_product['pricehtml']; ?></span></span>
+            </li>
+        <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
+        </ul>
+        <?php endif ?>
+        <?php endforeach ?>
+        <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
+<div class="pagination_new">
+	<div class="btn-group">
+		<?php echo $this->getPaginationHtml(); ?>
+	</div>
+</div>
+	<?php else: ?>
+		<p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
+	<?php endif; ?>
+	</div>
+
+<?php if($_category && $_longdescription=$_category->getLongDescription()): ?>
+    <div class="category-description std">
+        <?php echo $_longdescription; ?>
+    </div>
+<?php endif; ?>

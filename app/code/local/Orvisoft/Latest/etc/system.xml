@@ -1,0 +1,191 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade OrviSoft Latest to newer
+ * versions in the future. If you wish to customize the code for your
+ * needs please refer to https://orvisoft.com/ for more information.
+ *
+ * @category    OrviSoft Latest Magento Connect
+ * @package     Orvisoft_Latest
+ * @copyright   Copyright (c) 20015 OrviSoft Private Limited. (www.orvisoft.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+/**
+ * OrviSoft Latest Package Module.
+ *
+ * @category   OrviSoft Latest Magento Connect
+ * @package    Orvisoft_Latest
+ * @author     Farhan Islam <farhan@orvisoft.com>
+ */
+-->
+<config>
+    <tabs>
+        <orvisoft translate="label" module="orvisoftlatest">
+            <label>Latest Configurations</label>
+            <sort_order>13</sort_order>
+        </orvisoft>
+    </tabs>
+    <sections>
+        <orvisoftlatest_setup translate="label" module="orvisoftlatest">
+            <label>Latest Products Per Category</label>
+            <tab>orvisoft</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>500</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <settings translate="label" module="orvisoftlatest">
+                    <label>Latest Products Per Category Configurations</label>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <status translate="label">
+                            <label>Status</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </status>
+                        <page_size translate="label, comment">
+                            <label>Page Size</label>
+                            <comment><![CDATA[Enter Number of Categories Per Page. Set 0 to show all]]></comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>51</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <status>1</status>
+                            </depends>
+                        </page_size>
+						<product_size translate="label, comment">
+                            <label>Products Count</label>
+                            <comment><![CDATA[Enter Number of Number of products to show in each category. Default is 4]]></comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>52</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <status>1</status>
+                            </depends>
+                        </product_size>
+						<total translate="label, comment">
+                            <label>Total Count</label>
+                            <comment><![CDATA[With this you can include total counts on each category level]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <sort_order>53</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <status>1</status>
+                            </depends>
+                        </total>
+						
+						<total_new translate="label, comment">
+                            <label>New Products Count</label>
+                            <comment><![CDATA[With this you can include new total counts on each category level]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <sort_order>54</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <status>1</status>
+								<total>1</total>
+                            </depends>
+                        </total_new>
+						<last_update translate="label, comment">
+                            <label>Last Update</label>
+                            <comment><![CDATA[With this you can include Updated product date/time]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <sort_order>55</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <status>1</status>
+								<total_new>1</total_new>
+                            </depends>
+                        </last_update>
+                        <categories translate="label, comment">
+                            <label>Categories</label>
+                            <comment><![CDATA[Select Categories you want to show on page]]></comment>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>orvisoftlatest/system_categories</source_model>
+                            <sort_order>57</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <status>1</status>
+                            </depends>
+                        </categories>
+						<!-- Include Empty category check disabled in favor of pagination. -->
+						<!--<include_empty translate="label, comment">
+                            <label>Include Empty Categories</label>
+                            <comment><![CDATA[Include Empty Categories?]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <sort_order>58</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <status>1</status>
+                            </depends>
+                        </include_empty>-->
+						<empty_message translate="label, comment">
+                            <label>Empty Categories Message</label>
+                            <comment><![CDATA[Message for Empty categories.]]></comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>59</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <status>1</status>
+								<!--<include_empty>1</include_empty>-->
+                            </depends>
+                        </empty_message>
+					</fields>
+                </settings>
+                
+                
+                
+            </groups>
+        </orvisoftlatest_setup>
+        <orvisoftlatest_info translate="label" module="orvisoftlatest">
+            <label>About Author</label>
+            <tab>orvisoft</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>510</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+            <groups>
+                <info translate="label">
+                    <label>Author Info</label>
+                    <frontend_type>text</frontend_type>
+                    <frontend_model>orvisoftlatest/info</frontend_model>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>                    
+                </info>
+            </groups>
+        </orvisoftlatest_info>
+    </sections>
+</config>
